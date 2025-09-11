@@ -20,6 +20,7 @@ public enum ExceptionType {
     TOKEN_UNAUTHORIZED(UNAUTHORIZED, "E101", "인증이 필요합니다."),
     INVALID_TOKEN(UNAUTHORIZED, "E102", "유효하지 않은 토큰입니다."),
     EXPIRED_TOKEN(UNAUTHORIZED, "E103", "만료된 토큰입니다."),
+    NOT_CONVERSATION_ACCESS(UNAUTHORIZED, "E104", "해당 대화방에 접근할 권한이 없습니다."),
 
     // 403 Forbidden
     ACCESS_DENIED(FORBIDDEN, "E201", "접근이 거부되었습니다."),

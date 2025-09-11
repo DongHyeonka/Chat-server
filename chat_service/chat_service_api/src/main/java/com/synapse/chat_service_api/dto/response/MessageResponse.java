@@ -3,6 +3,8 @@ package com.synapse.chat_service_api.dto.response;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.synapse.chat_service_api.dto.enums.SenderType;
+
 public class MessageResponse {
     public record ConversationInfo(
         UUID conversationId,
@@ -27,17 +29,19 @@ public class MessageResponse {
     public record History(
         Long id,
         UUID conversationId,
-        String senderType,
+        SenderType senderType,
         String content,
-        LocalDateTime createdDate
+        LocalDateTime createdDate,
+        LocalDateTime updatedDate
     ) {
-        public static History to(Long messageId, UUID conversionId, String senderType, String content, LocalDateTime createdDate) {
+        public static History to(Long messageId, UUID conversionId, SenderType senderType, String content, LocalDateTime createdDate, LocalDateTime updatedDate) {
             return new History(
                 messageId,
                 conversionId,
                 senderType,
                 content,
-                createdDate
+                createdDate,
+                updatedDate
             );
         }
     }

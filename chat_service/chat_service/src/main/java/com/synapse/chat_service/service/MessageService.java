@@ -6,19 +6,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.synapse.chat_service.domain.entity.Conversation;
 import com.synapse.chat_service.domain.entity.Message;
-import com.synapse.chat_service.domain.entity.enums.SenderType;
 import com.synapse.chat_service.domain.repository.ConversationRepository;
 import com.synapse.chat_service.domain.repository.MessageRepository;
+import com.synapse.chat_service.exception.commonexception.AccessDeniedException;
+import com.synapse.chat_service.exception.domain.ExceptionType;
 import com.synapse.chat_service.service.ai.AIModelService;
 import com.synapse.chat_service.service.ai.AIModelServiceFactory;
 import com.synapse.chat_service.service.ai.AIModelType;
 import com.synapse.chat_service.session.RedisAiChatManager;
+import com.synapse.chat_service_api.dto.enums.SenderType;
 import com.synapse.chat_service_api.dto.request.MessageRequest;
 import com.synapse.chat_service_api.dto.response.ChatHistoryResponse;
 import com.synapse.chat_service_api.dto.response.MessageResponse;
@@ -50,7 +54,7 @@ public class MessageService {
                 .build();
 
         Message savedMessage = messageRepository.save(message);
-        return MessageResponse.History.to(savedMessage.getId(), savedMessage.getConversation().getId(), savedMessage.getSenderType().toString(), savedMessage.getContent(), savedMessage.getCreatedDate());
+        return MessageResponse.History.to(savedMessage.getId(), savedMessage.getConversation().getId(), savedMessage.getSenderType(), savedMessage.getContent(), savedMessage.getCreatedDate(), savedMessage.getUpdatedDate());
     }
 
     /**
@@ -112,13 +116,20 @@ public class MessageService {
      * @param cursor
      * @return
      */
-    public ChatHistoryResponse getMessagesRecentFirst(UUID userId, Integer size, String cursor) {
+    public ChatHistoryResponse getMessagesRecentFirst(UUID userId, UUID conversationId, Integer size, String cursor) {
+        if (!conversationRepository.existsByIdAndUserId(conversationId, userId)) {
+            throw new AccessDeniedException(ExceptionType.NOT_CONVERSATION_ACCESS);
+        }
+
         int queryLimit = size + 1;
 
         Long cursorId = cursor != null && !cursor.isEmpty() ? parseCursor(cursor) : null;
 
-        List<MessageResponse.History> messages = messageRepository.findByUserIdWithCursorDesc(
-                userId, cursorId, queryLimit);
+        Pageable pageable = PageRequest.of(0, queryLimit);
+
+        List<MessageResponse.History> messages = messageRepository.findByConversationIdWithCursorDesc(
+            conversationId, cursorId, pageable
+        );
 
         // 다음 페이지 존재 여부 확인
         boolean hasNext = messages.size() > size;

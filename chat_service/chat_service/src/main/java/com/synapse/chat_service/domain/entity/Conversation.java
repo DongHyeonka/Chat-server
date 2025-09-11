@@ -12,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -20,7 +21,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "conversations")
+@Table(
+    name = "conversations", 
+    indexes = @Index(name = "idx_conversations_user_id", columnList = "user_id")
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Conversation extends BaseTimeEntity {
@@ -29,7 +33,7 @@ public class Conversation extends BaseTimeEntity {
     @Column(name = "conversation_id", columnDefinition = "UUID")
     private UUID id;
 
-    @Column(name = "user_id", nullable = false, unique = true, columnDefinition = "uuid")
+    @Column(name = "user_id", nullable = false, columnDefinition = "uuid")
     private UUID userId;
 
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)

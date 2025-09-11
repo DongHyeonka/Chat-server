@@ -1,7 +1,7 @@
 package com.synapse.chat_service.domain.entity;
 
 import com.synapse.chat_service.domain.common.BaseTimeEntity;
-import com.synapse.chat_service.domain.entity.enums.SenderType;
+import com.synapse.chat_service_api.dto.enums.SenderType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -21,7 +22,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "messages")
+@Table(
+    name = "messages", 
+    indexes = @Index(name = "idx_messages_conversation_id_id_desc", columnList = "conversation_id, id DESC, sender_type, content, created_date, updated_date")
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message extends BaseTimeEntity {

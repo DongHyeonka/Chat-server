@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,12 +33,13 @@ public class AiChatController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/history/recent")
+    @GetMapping("/recent/{conversationId}")
     public ResponseEntity<ChatHistoryResponse> getMyAiChatHistoryRecentFirst(
         @AuthenticationPrincipal UUID userId,
+        @PathVariable("conversationId") UUID conversationId,
         @Valid ChatMessageRequest request
     ) {
-        ChatHistoryResponse response = messageService.getMessagesRecentFirst(userId, request.size(), request.cursor());
+        ChatHistoryResponse response = messageService.getMessagesRecentFirst(userId, conversationId, request.size(), request.cursor());
         return ResponseEntity.ok(response);
     }
 }

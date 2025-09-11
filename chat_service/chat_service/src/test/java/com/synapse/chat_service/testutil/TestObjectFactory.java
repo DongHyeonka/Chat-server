@@ -7,8 +7,8 @@ import java.util.UUID;
 import com.synapse.chat_service.domain.entity.ChatUsage;
 import com.synapse.chat_service.domain.entity.Conversation;
 import com.synapse.chat_service.domain.entity.Message;
-import com.synapse.chat_service.domain.entity.enums.SenderType;
 import com.synapse.chat_service.domain.entity.enums.SubscriptionType;
+import com.synapse.chat_service_api.dto.enums.SenderType;
 
 public class TestObjectFactory {
 

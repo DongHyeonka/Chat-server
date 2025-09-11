@@ -13,7 +13,9 @@ spring:
         highlight:
             sql: true
         hbm2ddl:
-            auto: create
+            auto: update
+        generate_statistics: true
+        default_batch_fetch_size: 100
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
     show-sql: true

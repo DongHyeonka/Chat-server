@@ -12,4 +12,6 @@ public interface ConversationRepository extends JpaRepository<Conversation, UUID
     Optional<Conversation> findByUserId(UUID userId);
 
     Optional<List<Conversation>> findByUserIdOrderByCreatedDateDesc(UUID userId);
+
+    boolean existsByIdAndUserId(UUID conversationId, UUID userId);
 }

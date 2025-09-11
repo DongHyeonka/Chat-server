@@ -16,7 +16,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.synapse.chat_service.domain.entity.Conversation;
 import com.synapse.chat_service.domain.entity.Message;
-import com.synapse.chat_service.domain.entity.enums.SenderType;
 import com.synapse.chat_service.domain.repository.ConversationRepository;
 import com.synapse.chat_service.domain.repository.MessageRepository;
 import com.synapse.chat_service.service.ai.AIModelService;
@@ -24,6 +23,7 @@ import com.synapse.chat_service.service.ai.AIModelServiceFactory;
 import com.synapse.chat_service.service.ai.AIModelType;
 import com.synapse.chat_service.session.RedisAiChatManager;
 import com.synapse.chat_service.testutil.TestObjectFactory;
+import com.synapse.chat_service_api.dto.enums.SenderType;
 import com.synapse.chat_service_api.dto.request.MessageRequest;
 import com.synapse.chat_service_api.dto.response.MessageResponse;
 
